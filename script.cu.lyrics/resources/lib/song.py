@@ -30,7 +30,9 @@ class Song:
     def current():
         song = Song()
         song.title = xbmc.getInfoLabel( "MusicPlayer.Title" )
+        song.title = utilities.deAccent(song.title)
         song.artist = xbmc.getInfoLabel( "MusicPlayer.Artist")
+        song.artist = utilities.deAccent(song.artist)
         
         print "Current Song: %s:%s" % (song.artist, song.title)
         
