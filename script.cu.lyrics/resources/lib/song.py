@@ -30,7 +30,6 @@ class Song:
     def current():
         song = Song.by_offset(0)
         print "Current Song: %s:%s" % (song.artist, song.title)
-        
         return song
 
     @staticmethod
@@ -43,9 +42,13 @@ class Song:
     @staticmethod
     def by_offset(offset = 0):
         song = Song()
-        song.title = xbmc.getInfoLabel( "MusicPlayer.offset(%i).Title" % offset)
+    	if offset > 0:
+            offset_str = ".offset(%i)" % offset
+        else:
+            offset_str = ""	
+        song.title = xbmc.getInfoLabel( "MusicPlayer%s.Title" % offset_str)
         song.title = utilities.deAccent(song.title)
-        song.artist = xbmc.getInfoLabel( "MusicPlayer.offset(%i).Artist" % offset)
+        song.artist = xbmc.getInfoLabel( "MusicPlayer%s.Artist" % offset_str)
         song.artist = utilities.deAccent(song.artist)
         
         return song
