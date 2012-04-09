@@ -152,17 +152,24 @@ class LyricsFetcher:
         l = lyrics.Lyrics()
         l.song = song
         try: # below is borowed from XBMC Lyrics
+            url = "http://www.lyricsmode.com/lyrics/%s/%s/%s.html" % (song.artist.lower()[:1],song.artist.lower().replace(" ","_"), song.title.lower().replace(" ","_"), )
+            lyrics_found = False
             while True:
                 print "Search url: %s" % (url)
                 song_search = urllib.urlopen(url).read()
                 if song_search.find("<div id='songlyrics_h' class='dn'>") >= 0:
                     break
     
+                if lyrics_found:
+                    # if we're here, we found the lyrics page but it didn't
+                    # contains the lyrics part (licensing issue or some bug)
+                    return None, "No lyrics found"
+                    
                 # Let's try to use the research box if we didn't yet
                 if not 'search' in url:
                     url = "http://www.lyricsmode.com/search.php?what=songs&s=" + urllib.quote_plus(song.title.lower())
                 else:
-                    # the search gave several results, let's try to find our song
+                    # the search gave more than on result, let's try to find our song 
                     url = ""
                     start = song_search.find('<!--output-->')
                     end = song_search.find('<!--/output-->', start)
@@ -171,6 +178,7 @@ class LyricsFetcher:
                     for result in results:
                         if result[0].lower() in song.artist.lower():
                             url = "http://www.lyricsmode.com" + result[1]
+                            lyrics_found = True
                             break
       
                     if not url:
@@ -180,7 +188,7 @@ class LyricsFetcher:
                             url = "http://www.lyricsmode.com/search.php" + match.group(1)
                         else:
                             return None, "No lyrics found"            
-            song_search = urllib.urlopen(url).read()
+
             lyr = song_search.split("<div id='songlyrics_h' class='dn'>")[1].split('<!-- /SONG LYRICS -->')[0]
             lyr = self.clean_br_regex.sub( "\n", lyr ).strip()
             lyr = self.clean_lyrics_regex.sub( "", lyr ).strip()
