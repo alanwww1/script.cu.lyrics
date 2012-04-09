@@ -28,24 +28,24 @@ class Song:
     
     @staticmethod
     def current():
-        song = Song()
-        song.title = xbmc.getInfoLabel( "MusicPlayer.Title" )
-        song.title = utilities.deAccent(song.title)
-        song.artist = xbmc.getInfoLabel( "MusicPlayer.Artist")
-        song.artist = utilities.deAccent(song.artist)
-        
+        song = Song.by_offset(0)
         print "Current Song: %s:%s" % (song.artist, song.title)
         
         return song
 
     @staticmethod
     def next():
-        song = Song()
-        song.title = xbmc.getInfoLabel( "MusicPlayer.offset(1).Title" )
-        song.title = utilities.deAccent(song.title)
-        song.artist = xbmc.getInfoLabel( "MusicPlayer.offset(1).Artist")
-        song.artist = utilities.deAccent(song.artist)
-        
+        song = Song.by_offset(1)
         print "Next Song: %s:%s" % (song.artist, song.title)
+        
+        return song
+
+    @staticmethod
+    def by_offset(offset = 0):
+        song = Song()
+        song.title = xbmc.getInfoLabel( "MusicPlayer.offset(%i).Title" % offset)
+        song.title = utilities.deAccent(song.title)
+        song.artist = xbmc.getInfoLabel( "MusicPlayer.offset(%i).Artist" % offset)
+        song.artist = utilities.deAccent(song.artist)
         
         return song
