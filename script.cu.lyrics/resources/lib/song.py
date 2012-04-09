@@ -2,6 +2,7 @@ import os
 import utilities
 import xbmc
 import sys
+import re
 
 __cwd__     = sys.modules[ "__main__" ].__cwd__
 __profile__ = sys.modules[ "__main__" ].__profile__
@@ -37,6 +38,11 @@ class Song:
             if sep > 1:
                 song.artist = song.title[:sep - 1].strip()
                 song.title = song.title[sep + 1:].strip()
+                # The title in the radio often contains some additional 
+                # bracketed information at the end: 
+                #  Radio version, short version, year of the song...
+                # It often disturbs the lyrics search so we remove it 
+                song.title = re.sub(r'\([^\)]*\)$', '', song.title)
 
         print "Current Song: %s:%s" % (song.artist, song.title)
         return song
