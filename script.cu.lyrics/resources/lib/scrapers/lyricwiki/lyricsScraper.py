@@ -1,3 +1,4 @@
+#-*- coding: UTF-8 -*-
 import sys, re, urllib2, socket, HTMLParser
 import xbmc, xbmcaddon
 if sys.version_info < (2, 7):
@@ -8,18 +9,12 @@ import lyrics
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30008)
-__allow_exceptions__ = True
 
 socket.setdefaulttimeout(10)
 
 class LyricsFetcher:
     def __init__( self ):
         self.url = 'http://lyrics.wikia.com/api.php?artist=%s&song=%s&fmt=realjson'
-
-    def get_lyrics_start(self, *args):
-        lyricThread = threading.Thread(target=self.get_lyrics_thread, args=args)
-        lyricThread.setDaemon(True)
-        lyricThread.start()
 
     def get_lyrics_thread(self, song):
         xbmc.log(msg='SCRAPER-DEBUG-Lyricwiki: LyricsFetcher.get_lyrics_thread %s' % (song), level=xbmc.LOGDEBUG)

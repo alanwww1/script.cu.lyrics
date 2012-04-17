@@ -1,19 +1,10 @@
-
+#-*- coding: UTF-8 -*-
 import sys
-import os
 import xbmc
-import xbmcgui
 import unicodedata
 
-DEBUG_MODE = 0
-
-_              = sys.modules[ "__main__" ].__language__
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
-__version__    = sys.modules[ "__main__" ].__version__
-__cwd__        = sys.modules[ "__main__" ].__cwd__
 
-
-BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 # special button codes
 SELECT_ITEM = ( 11, 256, 61453, )
 EXIT_SCRIPT = ( 247, 275, 61467, )
@@ -34,21 +25,15 @@ ACTION_SHOW_CREDITS = ( 122, )
 ACTION_MOVEMENT_UP = ( 3, )
 ACTION_MOVEMENT_DOWN = ( 4, )
 
-# Log status codes
-LOG_INFO, LOG_ERROR, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
 
-def LOG( status, format, *args ):
-    if ( DEBUG_MODE >= status ):
-        xbmc.log( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
-
-def unescape(s):
-    s = s.replace("&lt;", "<")
-    s = s.replace("&quot;", '"')
-    s = s.replace("&apos;", "'")
-    s = s.replace("&gt;", ">")
-    s = s.replace("&amp;", "&")
-    return s
+def log(msg):
+    xbmc.log("### [%s] - %s" % (__scriptname__,msg,),level=xbmc.LOGDEBUG ) 
 
 def deAccent(str):
     return unicodedata.normalize('NFKD', unicode(unicode(str, 'utf-8'))).encode('ascii','ignore')
 
+def replace(string):
+    replace_char = [" ",",","'","&","and"]
+    for char in replace_char:
+        string.replace(char,"-")
+    return string

@@ -1,3 +1,4 @@
+#-*- coding: UTF-8 -*-
 import os
 import utilities
 import xbmc
@@ -44,13 +45,13 @@ class Song:
                 # It often disturbs the lyrics search so we remove it 
                 song.title = re.sub(r'\([^\)]*\)$', '', song.title)
 
-        print "Current Song: %s:%s" % (song.artist, song.title)
+        utilities.log( "Current Song: %s:%s" % (song.artist, song.title))
         return song
 
     @staticmethod
     def next():
         song = Song.by_offset(1)
-        print "Next Song: %s:%s" % (song.artist, song.title)
+        utilities.log( "Next Song: %s:%s" % (song.artist, song.title))
         
         return song
 
