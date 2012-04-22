@@ -21,7 +21,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def onInit( self ):
         self.setup_all()
-        
+
     def setup_all( self ):
         self.setup_variables()
         self.get_scraper_list()
@@ -55,10 +55,10 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def get_lyrics(self, song, next_song = False):
         try:
             lyrics, error = self.get_lyrics_from_memory( song )
-            
+
             if (lyrics is None ):
                 lyrics, error = self.get_lyrics_from_file( song, next_song )
-                           
+
             if ( lyrics is None ):
                 for scraper in self.scrapers:
                     lyrics, error, service = scraper.get_lyrics_thread( song )
@@ -67,13 +67,13 @@ class GUI( xbmcgui.WindowXMLDialog ):
                         break
                     else:
                         log('%s: no results found' % service)
-                
+
                 if ( lyrics is not None ):
                     try:
                         self.save_lyrics_to_file(lyrics)
                     except:
                         pass
-            
+
             return lyrics, error
         except:
             log( traceback.format_exc(sys.exc_info()[2]) )
@@ -99,7 +99,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
               try:
                   self.save_lyrics_to_file(lyrics)
               except:
-                  pass            
+                  pass
             return lyrics, None
         try:
             lyrics_file = open( song.path(), "r" )
@@ -132,7 +132,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 return True
             except IOError:
                 return False
-    
+
     def focus_lyrics(self):
         if ( __addon__.getSetting( "smooth_scrolling" ) ):
             self.show_control( 110 )
@@ -145,7 +145,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             self.show_control( 100 )
         except:
             pass
-    
+
     def show_lyrics( self, lyrics):
         try:
             self.reset_controls()
@@ -161,14 +161,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 splitLyrics = lyricsText.splitlines()
                 for x in splitLyrics:
                     self.getControl( 110 ).addItem( x )
-                
+
                 self.getControl( 110 ).selectItem( 0 )
-                
+
                 self.focus_lyrics()
-                
+
                 self.getControl( 200 ).setEnabled( False )
                 self.getControl( 200 ).setLabel( lyrics.source )
-            
+
         finally:
             pass
 
@@ -176,7 +176,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.reset_controls()
         self.getControl( 100 ).setText( __language__(30000) )
         self.show_control( 100 )
-    
+
     def reset_controls( self ):
         self.getControl( 100 ).reset()
         self.getControl( 110 ).reset()
@@ -192,11 +192,11 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
     def onFocus( self, controlId ):
         self.controlId = controlId
-        
+
     def onAction( self, action ):
         if ( action.getId() in CANCEL_DIALOG):
             self.exit_script()
-            
+
     def getMyPlayer( self ):
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function=self.myPlayerChanged )
         self.myPlayerChanged( 2 )
@@ -216,14 +216,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
                     log( "Current: %s" % (self.current_song) )
                     log( "song: %s" % (song) )
                     i = 0
-                    while ( song is not None 
-                            and self.current_song is not None 
+                    while ( song is not None
+                            and self.current_song is not None
                             and self.current_song == song
                             and i < 50 ):
                         i += 1
                         xbmc.sleep( 50 )
                         song = Song.current()
-                    
+
                     if ( song and ( self.current_song != song or force_update ) ):
                         self.current_song = song
                         self.show_prefetch_message(song)
@@ -232,26 +232,26 @@ class GUI( xbmcgui.WindowXMLDialog ):
                             self.show_lyrics(lyrics)
                         else:
                             self.show_error(error)
-                    
+
                     next_song = Song.next()
                     if ( next_song ):
                         self.get_lyrics( next_song, True )
                     else:
                         log( "Missing Artist or Song name in ID3 tag for next track" )
-                        
+
                 else:
                    lyrics, error = self.get_lyrics(self.current_song)
                    if ( lyrics is not None ):
                        self.show_lyrics(lyrics)
                    else:
-                       self.show_error(error)                   
-                   
+                       self.show_error(error)
+
                    next_song = Song.next()
                    if ( next_song ):
                        self.get_lyrics( next_song, True )
                    else:
-                       log( "Missing Artist or Song name in ID3 tag for next track" )                  
-                    
+                       log( "Missing Artist or Song name in ID3 tag for next track" )
+
         except:
             pass
 
@@ -267,19 +267,15 @@ class MyPlayer( xbmc.Player ):
         xbmc.sleep( 300 )
         if ( not xbmc.Player().isPlayingAudio() ):
             self.function( 0 )
-    
+
     def onPlayBackEnded( self ):
         xbmc.sleep( 300 )
         if ( not xbmc.Player().isPlayingAudio() ):
-            self.function( 1 )      
-    
+            self.function( 1 )
+
     def onPlayBackStarted( self ):
         try:
             self.function( 2 )
         except:
             log( "%s::%s (%d) [%s]" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ]))
             log( traceback.format_exc(sys.exc_info()[2]))
-
-
-        
-        

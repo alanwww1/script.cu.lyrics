@@ -12,7 +12,7 @@ LYRIC_SCRAPER_DIR = os.path.join(__cwd__, "resources", "lib", "scrapers")
 CANCEL_DIALOG     = ( 9, 10, 92, 216, 247, 257, 275, 61467, 61448, )
 
 def log(msg):
-    xbmc.log("### [%s] - %s" % (__scriptname__,msg,),level=xbmc.LOGDEBUG ) 
+    xbmc.log("### [%s] - %s" % (__scriptname__,msg,),level=xbmc.LOGDEBUG )
 
 def deAccent(str):
     return unicodedata.normalize('NFKD', unicode(unicode(str, 'utf-8'))).encode('ascii','ignore')
@@ -28,7 +28,7 @@ class Lyrics:
         self.song = Song()
         self.lyrics = ""
         self.source = ""
-    
+
 class Song:
     def __init__( self ):
         self.artist = ""
@@ -36,19 +36,19 @@ class Song:
 
     def __str__(self):
         return "Artist: %s, Title: %s" % ( self.artist, self.title)
-    
+
     def __cmp__(self, song):
         if (self.artist != song.artist):
             return cmp(self.artist, song.artist)
         else:
             return cmp(self.title, song.title)
-    
+
     def sanitize(self, str):
         return str.replace( "\\", "_" ).replace( "/", "_" ).replace(":","_").replace("?","_").replace("!","_")
-    
+
     def path(self):
         return unicode( os.path.join( __profile__, "lyrics", self.sanitize(self.artist), self.sanitize(self.title) + ".txt" ), "utf-8" )
-    
+
     @staticmethod
     def current():
         song = Song.by_offset(0)
@@ -60,10 +60,10 @@ class Song:
             if sep > 1:
                 song.artist = song.title[:sep - 1].strip()
                 song.title = song.title[sep + 1:].strip()
-                # The title in the radio often contains some additional 
-                # bracketed information at the end: 
+                # The title in the radio often contains some additional
+                # bracketed information at the end:
                 #  Radio version, short version, year of the song...
-                # It often disturbs the lyrics search so we remove it 
+                # It often disturbs the lyrics search so we remove it
                 song.title = re.sub(r'\([^\)]*\)$', '', song.title)
 
         log( "Current Song: %s:%s" % (song.artist, song.title))
@@ -73,7 +73,7 @@ class Song:
     def next():
         song = Song.by_offset(1)
         log( "Next Song: %s:%s" % (song.artist, song.title))
-        
+
         return song
 
     @staticmethod
@@ -87,5 +87,5 @@ class Song:
         song.title = deAccent(song.title)
         song.artist = xbmc.getInfoLabel( "MusicPlayer%s.Artist" % offset_str)
         song.artist = deAccent(song.artist)
-        
+
         return song    
