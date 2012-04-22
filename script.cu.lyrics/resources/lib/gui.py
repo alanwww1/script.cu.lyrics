@@ -246,11 +246,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                    else:
                        self.show_error(error)
 
-                   next_song = Song.next()
-                   if ( next_song ):
-                       self.get_lyrics( next_song, True )
-                   else:
-                       log( "Missing Artist or Song name in ID3 tag for next track" )
+                   if xbmc.getCondVisibility('MusicPlayer.HasNext'):
+                       next_song = Song.next()
+                       if ( next_song ):
+                           self.get_lyrics( next_song, True )
+                       else:
+                           log( "Missing Artist or Song name in ID3 tag for next track" )
 
         except:
             pass
