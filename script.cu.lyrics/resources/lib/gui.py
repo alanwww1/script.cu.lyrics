@@ -172,7 +172,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         finally:
             pass
 
-    def show_prefetch_message(self, song):
+    def show_prefetch_message(self):
         self.reset_controls()
         self.getControl( 100 ).setText( __language__(30000) )
         self.show_control( 100 )
@@ -207,14 +207,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
             if ( event < 2 ):
                 self.exit_script()
             else:
-                self.show_prefetch_message(self.current_song)
+                self.show_prefetch_message()
                 xbmc.sleep( 750 )
                 playing_song = xbmc.Player().getMusicInfoTag().getTitle()
                 if ( self.song_info != playing_song ):
                     self.song_info = playing_song
                     song = Song.current()
-                    log( "Current: %s" % (self.current_song) )
-                    log( "song: %s" % (song) )
                     i = 0
                     while ( song is not None
                             and self.current_song is not None
@@ -226,32 +224,32 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
                     if ( song and ( self.current_song != song or force_update ) ):
                         self.current_song = song
-                        self.show_prefetch_message(song)
                         lyrics, error = self.get_lyrics( song )
                         if ( lyrics is not None ):
                             self.show_lyrics(lyrics)
                         else:
                             self.show_error(error)
 
-                    next_song = Song.next()
-                    if ( next_song ):
-                        self.get_lyrics( next_song, True )
-                    else:
-                        log( "Missing Artist or Song name in ID3 tag for next track" )
+                    if xbmc.getCondVisibility('MusicPlayer.HasNext'):
+                        next_song = Song.next()
+                        if ( (next_song) > 0 ):
+                            self.get_lyrics( next_song, True )
+                        else:
+                            log( "Missing Artist or Song name in ID3 tag for next track" )
 
                 else:
-                   lyrics, error = self.get_lyrics(self.current_song)
-                   if ( lyrics is not None ):
-                       self.show_lyrics(lyrics)
-                   else:
-                       self.show_error(error)
+                    lyrics, error = self.get_lyrics(self.current_song)
+                    if ( lyrics is not None ):
+                        self.show_lyrics(lyrics)
+                    else:
+                        self.show_error(error)
 
-                   if xbmc.getCondVisibility('MusicPlayer.HasNext'):
-                       next_song = Song.next()
-                       if ( (next_song) > 0 ):
-                           self.get_lyrics( next_song, True )
-                       else:
-                           log( "Missing Artist or Song name in ID3 tag for next track" )
+                    if xbmc.getCondVisibility('MusicPlayer.HasNext'):
+                        next_song = Song.next()
+                        if ( (next_song) > 0 ):
+                            self.get_lyrics( next_song, True )
+                        else:
+                            log( "Missing Artist or Song name in ID3 tag for next track" )
 
         except:
             pass
