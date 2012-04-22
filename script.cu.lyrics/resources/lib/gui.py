@@ -61,9 +61,12 @@ class GUI( xbmcgui.WindowXMLDialog ):
                            
             if ( lyrics is None ):
                 for scraper in self.scrapers:
-                    lyrics, error = scraper.get_lyrics_thread( song )
+                    lyrics, error, service = scraper.get_lyrics_thread( song )
                     if lyrics is not None:
+                        log('%s: found lyrics' % service)
                         break
+                    else:
+                        log('%s: no results found' % service)
                 
                 if ( lyrics is not None ):
                     try:

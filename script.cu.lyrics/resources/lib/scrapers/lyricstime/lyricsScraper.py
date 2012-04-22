@@ -6,7 +6,7 @@ from utilities import *
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30007)
-
+__service__ = 'lyricstime'
 
 class LyricsFetcher:
     def __init__( self ):
@@ -16,7 +16,7 @@ class LyricsFetcher:
         self.clean_info_regex = re.compile( "\[[a-z]+?:.*\]\s" )    
     
     def get_lyrics_thread(self, song):
-        log( "SCRAPER-DEBUG-lyricstime: LyricsFetcher.get_lyrics_thread %s" % (song))
+        log( "%s: searching lyrics for %s" % (__service__, song))
         l = Lyrics()
         l.song = song
         try: # ***** parser - changing this changes search string
@@ -25,7 +25,7 @@ class LyricsFetcher:
                      replace(song.title.lower())
                      )
             song_search = urllib.urlopen(url.replace("---","-").replace("--","-")).read()
-            log( "Search url: %s" % (url))
+            log( "%s: search url: %s" % (__service__, url))
             lyr = song_search.split('<div id="songlyrics" >')[1].split('</div>')[0]     
             lyr = self.clean_br_regex.sub( "\n", lyr ).strip()
             lyr = self.clean_lyrics_regex.sub( "", lyr ).strip()
@@ -35,11 +35,11 @@ class LyricsFetcher:
             lyr = self.clean_info_regex.sub( "", lyr )     
             l.lyrics = lyr
             l.source = __title__
-            return l, None            
+            return l, None, __service__            
         except:
-            log( "%s::%s (%d) [%s]" % ( self.__class__.__name__,
+            log( "%s: %s::%s (%d) [%s]" % ( __service__, self.__class__.__name__,
                                         sys.exc_info()[ 2 ].tb_frame.f_code.co_name,
                                         sys.exc_info()[ 2 ].tb_lineno,
                                         sys.exc_info()[ 1 ]
                                         ))
-            return None, __language__(30004) % (__title__)
+            return None, __language__(30004) % (__title__), __service__

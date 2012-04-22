@@ -9,6 +9,7 @@ from utilities import *
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30008)
+__service__ = 'lyricswiki'
 
 socket.setdefaulttimeout(10)
 
@@ -17,7 +18,8 @@ class LyricsFetcher:
         self.url = 'http://lyrics.wikia.com/api.php?artist=%s&song=%s&fmt=realjson'
 
     def get_lyrics_thread(self, song):
-        xbmc.log(msg='SCRAPER-DEBUG-Lyricwiki: LyricsFetcher.get_lyrics_thread %s' % (song), level=xbmc.LOGDEBUG)
+        log( "%s: searching lyrics for %s" % (__service__, song))
+        log( "%s: search api url: %s" % (__service__, self.url))
         l = Lyrics()
         l.song = song
         req = urllib2.urlopen(self.url % (urllib2.quote(song.artist), urllib2.quote(song.title)))
@@ -26,6 +28,7 @@ class LyricsFetcher:
         data = simplejson.loads(response)
         self.page = data['url']
         if not self.page.endswith('action=edit'):
+            log( "%s: search url: %s" % (__service__, self.page))
             req = urllib2.urlopen(self.page)
             response = req.read()
             req.close()
@@ -35,8 +38,8 @@ class LyricsFetcher:
                 htmlparser = HTMLParser.HTMLParser()
                 l.lyrics = htmlparser.unescape(lyricscode).replace('<br />', '\n')
                 l.source = __title__
-                return l, None
+                return l, None, __service__
             except:
-                return None, __language__(30004) % __title__
+                return None, __language__(30004) % __title__, __service__
         else:
-            return None, __language__(30002) % (song.title, song.artist)
+            return None, __language__(30002) % (song.title, song.artist), __service__

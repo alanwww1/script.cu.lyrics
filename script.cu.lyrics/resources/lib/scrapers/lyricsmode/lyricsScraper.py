@@ -6,6 +6,7 @@ from utilities import *
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30006)
+__service__ = 'lyricsmode'
 
 class LyricsFetcher:
     def __init__( self ):
@@ -16,7 +17,7 @@ class LyricsFetcher:
         self.next_results_regex = re.compile("<A href=\"([^\"]+)\" class=\"pages\">next .</A>", re.IGNORECASE)        
           
     def get_lyrics_thread(self, song):
-        log( "SCRAPER-DEBUG-lyricsmode: LyricsFetcher.get_lyrics_thread %s" % (song))
+        log( "%s: searching lyrics for %s" % (__service__, song))
         l = Lyrics()
         l.song = song
         try: # below is borowed from XBMC Lyrics
@@ -27,7 +28,7 @@ class LyricsFetcher:
                         )
             lyrics_found = False
             while True:
-                log( "Search url: %s" % (url))
+                log( "%s: search url: %s" % (__service__, url))
                 song_search = urllib.urlopen(url).read()
                 if song_search.find("<div id='songlyrics_h' class='dn'>") >= 0:
                     break
@@ -59,7 +60,7 @@ class LyricsFetcher:
                         if match:
                             url = "http://www.lyricsmode.com/search.php" + match.group(1)
                         else:
-                            return None, "No lyrics found"            
+                            return None, "No lyrics found", __service__            
 
             lyr = song_search.split("<div id='songlyrics_h' class='dn'>")[1].split('<!-- /SONG LYRICS -->')[0]
             lyr = self.clean_br_regex.sub( "\n", lyr ).strip()
@@ -73,13 +74,13 @@ class LyricsFetcher:
             lyr = u"\n".join( lir )       
             l.lyrics = lyr
             l.source = __title__
-            return l, None            
+            return l, None, __service__            
         except:
-            log( "%s::%s (%d) [%s]" % (
-                   self.__class__.__name__,
+            log( "%s: %s::%s (%d) [%s]" % (
+                   __service__, self.__class__.__name__,
                    sys.exc_info()[ 2 ].tb_frame.f_code.co_name,
                    sys.exc_info()[ 2 ].tb_lineno,
                    sys.exc_info()[ 1 ]
                    ))
-            return None, __language__(30004) % (__title__)      
+            return None, __language__(30004) % (__title__), __service__      
 
