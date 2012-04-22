@@ -26,7 +26,10 @@ class LyricsFetcher:
         response = req.read()
         req.close()
         data = simplejson.loads(response)
-        self.page = data['url']
+        try:
+            self.page = data['url']
+        except:
+            return None, __language__(30002) % (song.title, song.artist), __service__
         if not self.page.endswith('action=edit'):
             log( "%s: search url: %s" % (__service__, self.page))
             req = urllib2.urlopen(self.page)
