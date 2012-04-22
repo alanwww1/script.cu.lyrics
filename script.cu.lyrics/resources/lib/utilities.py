@@ -73,8 +73,10 @@ class Song:
     def next():
         song = Song.by_offset(1)
         log( "Next Song: %s:%s" % (song.artist, song.title))
-
-        return song
+        if song.artist != '' and song.title != '':
+            return song
+        else:
+            return None
 
     @staticmethod
     def by_offset(offset = 0):
