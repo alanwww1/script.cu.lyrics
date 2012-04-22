@@ -3,21 +3,12 @@ import sys
 import os
 import xbmc
 import xbmcgui
-import unicodedata
-import urllib
 import traceback
-import inspect
-from song import *
-from lyrics import *
 from utilities import *
 
-__scriptname__ = sys.modules[ "__main__" ].__scriptname__
-__version__    = sys.modules[ "__main__" ].__version__
 __addon__   = sys.modules[ "__main__" ].__addon__
 __language__   = sys.modules[ "__main__" ].__language__
-__cwd__        = sys.modules[ "__main__" ].__cwd__
 
-LYRIC_SCRAPER_DIR = os.path.join(__cwd__, "resources", "lib", "scrapers")
 
 class GUI( xbmcgui.WindowXMLDialog ):
     def __init__( self, *args, **kwargs ):
@@ -201,7 +192,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def onAction( self, action ):
         if ( action.getId() in CANCEL_DIALOG):
-            self.close()
+            self.exit_script()
             
     def getMyPlayer( self ):
         self.MyPlayer = MyPlayer( xbmc.PLAYER_CORE_PAPLAYER, function=self.myPlayerChanged )

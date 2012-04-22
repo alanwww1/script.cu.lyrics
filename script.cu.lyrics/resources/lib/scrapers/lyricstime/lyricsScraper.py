@@ -3,8 +3,6 @@ import sys
 import urllib
 import re
 from utilities import *
-from song import *
-import lyrics
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30007)
@@ -19,7 +17,7 @@ class LyricsFetcher:
     
     def get_lyrics_thread(self, song):
         log( "SCRAPER-DEBUG-lyricstime: LyricsFetcher.get_lyrics_thread %s" % (song))
-        l = lyrics.Lyrics()
+        l = Lyrics()
         l.song = song
         try: # ***** parser - changing this changes search string
             url = "http://www.lyricstime.com/%s-%s-lyrics.html" % (

@@ -5,7 +5,6 @@ if sys.version_info < (2, 7):
     import simplejson
 else:
     import json as simplejson
-import lyrics
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30008)
@@ -18,7 +17,7 @@ class LyricsFetcher:
 
     def get_lyrics_thread(self, song):
         xbmc.log(msg='SCRAPER-DEBUG-Lyricwiki: LyricsFetcher.get_lyrics_thread %s' % (song), level=xbmc.LOGDEBUG)
-        l = lyrics.Lyrics()
+        l = Lyrics()
         l.song = song
         req = urllib2.urlopen(self.url % (urllib2.quote(song.artist), urllib2.quote(song.title)))
         response = req.read()
