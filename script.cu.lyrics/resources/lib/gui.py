@@ -70,7 +70,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
 
                 if ( lyrics is not None ):
                     try:
-                        self.save_lyrics_to_file(lyrics)
+                        self.save_lyrics(lyrics)
                     except:
                         pass
 
