@@ -9,7 +9,7 @@ from utilities import *
 
 __language__ = sys.modules[ "__main__" ].__language__
 __title__ = __language__(30008)
-__service__ = 'lyricswiki'
+__service__ = 'lyricwiki'
 
 socket.setdefaulttimeout(10)
 
