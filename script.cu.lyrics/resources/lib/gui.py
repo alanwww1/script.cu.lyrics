@@ -134,7 +134,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 return False
 
     def focus_lyrics(self):
-        if ( __addon__.getSetting( "smooth_scrolling" ) ):
+        if ( __addon__.getSetting( "smooth_scrolling" ) ) == 'true':
             self.show_control( 110 )
         else:
             self.show_control( 100 )
