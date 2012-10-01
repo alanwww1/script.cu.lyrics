@@ -1,5 +1,11 @@
 2.1.0
 - fixed: smooth scrolling setting didn't work
+- fixed lyrictime scraper: replace spaces with dashes
+- fixed: don't fetch lyrics we already prefetched
+- fixed: check for next track
+- fixed: check next song data
+- lyricwiki: don't try to fetch lyrics for the next song if there isn't one
+- lyricwiki: don't crash on key errors
 
 2.0.6
 - Try all enabled scrapers until lyrics are found, thx to Yann Rouillard
