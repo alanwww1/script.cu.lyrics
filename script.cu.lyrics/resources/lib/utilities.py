@@ -75,8 +75,6 @@ class Song:
         log( "Next Song: %s:%s" % (song.artist, song.title))
         if song.artist != '' and song.title != '':
             return song
-        else:
-            return None
 
     @staticmethod
     def by_offset(offset = 0):
