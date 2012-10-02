@@ -1,3 +1,6 @@
+2.1.1
+- lyricwiki: strip html tags
+
 2.1.0
 - fixed: smooth scrolling setting didn't work
 - fixed lyrictime scraper: replace spaces with dashes

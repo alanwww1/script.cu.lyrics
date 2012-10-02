@@ -39,7 +39,8 @@ class LyricsFetcher:
             try:
                 lyricscode = (matchcode.group(1))
                 htmlparser = HTMLParser.HTMLParser()
-                l.lyrics = htmlparser.unescape(lyricscode).replace('<br />', '\n')
+                lyricstext = htmlparser.unescape(lyricscode).replace('<br />', '\n')
+                l.lyrics = re.sub('<[^<]+?>', '', lyricstext)
                 l.source = __title__
                 return l, None, __service__
             except:
