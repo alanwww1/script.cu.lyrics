@@ -26,7 +26,7 @@ class LyricsFetcher:
                      )
             song_search = urllib.urlopen(url).read()
             log( "%s: search url: %s" % (__service__, url))
-            lyr = song_search.split('<div id="songlyrics" >')[1].split('</div>')[0]
+            lyr = song_search.split('<div id="songlyrics" style="padding-right:20px;">')[1].split('</div>')[0]
             lyr = self.clean_br_regex.sub( "\n", lyr ).strip()
             lyr = self.clean_lyrics_regex.sub( "", lyr ).strip()
             lyr = self.normalize_lyrics_regex.sub(
