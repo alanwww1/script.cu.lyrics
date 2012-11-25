@@ -21,8 +21,8 @@ class LyricsFetcher:
         l.song = song
         try: # ***** parser - changing this changes search string
             url = "http://www.lyricstime.com/%s-%s-lyrics.html" % (
-                     replace(song.artist.lower()).replace(" ","-").replace("---","-").replace("--","-"),
-                     replace(song.title.lower()).replace(" ","-").replace("---","-").replace("--","-")
+                     replace(song.artist.lower()).replace("---","-").replace("--","-"),
+                     replace(song.title.lower()).replace("---","-").replace("--","-")
                      )
             song_search = urllib.urlopen(url).read()
             log( "%s: search url: %s" % (__service__, url))
