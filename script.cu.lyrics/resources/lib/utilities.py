@@ -21,7 +21,7 @@ def deAccent(str):
 def replace(string):
     replace_char = [" ",",","'","&","and"]
     for char in replace_char:
-        string.replace(char,"-")
+        string = string.replace(char,"-")
     return string
 
 class Lyrics:
